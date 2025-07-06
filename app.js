@@ -15,8 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 //ejsMate
-app.engine("ejs", engine);
-app.set("view engine", "ejs");
+app.engine("ejs", ejsMate);
+
+//To use style.css
+app.use(express.static(path.join(__dirname, "/public")));
 
 main()
   .then(() => {
