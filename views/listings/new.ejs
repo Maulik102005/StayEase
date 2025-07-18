@@ -2,8 +2,10 @@
 <body>
   <div class="row">
     <div class="col-8 offset-2">
-      <br />
-      <h3>Create New List</h3>
+      <div class="empty" style="height: 3rem"></div>
+
+      <h3>Create a new listing</h3>
+
       <form method="POST" action="/listings">
         <!-- Enter Title -->
         <div class="mb-3">
@@ -11,8 +13,9 @@
           <input
             type="text"
             name="listing[title]"
-            placeholder="enter title"
+            placeholder="Enter title here..."
             class="form-control"
+            required
           />
         </div>
 
@@ -23,6 +26,7 @@
             type="text"
             name="description"
             class="form-control"
+            required
           ></textarea>
         </div>
 
@@ -32,7 +36,7 @@
           <input
             type="text"
             name="listing[image]"
-            placeholder="enter image link/url"
+            placeholder="Enter Image link/url"
             class="form-control"
           />
         </div>
@@ -44,8 +48,9 @@
             <input
               type="number"
               name="listing[price]"
-              placeholder="enter price..."
+              placeholder="Enter Price here..."
               class="form-control"
+              required
             />
           </div>
 
@@ -55,8 +60,9 @@
             <input
               type="text"
               name="listing[country]"
-              placeholder="enter country"
+              placeholder="Enter Country here..."
               class="form-control"
+              required
             />
           </div>
         </div>
@@ -67,12 +73,13 @@
           <input
             type="text"
             name="listing[location]"
-            placeholder="enter location"
+            placeholder="Enter Location here..."
             class="form-control"
+            required
           />
         </div>
         <br /><br />
-        <button class="btn btn-dark">Add</button>
+        <button class="btn btn-dark add-btn">Add</button>
         <br /><br /><br />
       </form>
     </div>
