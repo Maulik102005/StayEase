@@ -6,6 +6,9 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 const sessionOptions = {
   secret: "mysecret",
@@ -19,8 +22,9 @@ const sessionOptions = {
 };
 
 //Express-Router
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 //ejs
 app.set("view engine", "ejs");
@@ -57,14 +61,34 @@ app.get("/", (req, res) => {
 app.use(session(sessionOptions));
 app.use(flash());
 
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//flash use
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+//demo user
+// app.get("/demouser", async (req, res, next) => {
+//   let fakeUser = new User({
+//     email: "student@gmail.com",
+//     username: "IITJ-student",
+//   });
+
+//   let registeredUser = await User.register(fakeUser, "helloworld");
+//   res.send(registeredUser);
+// });
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 app.listen(8080, () => {
   console.log("server is running");
