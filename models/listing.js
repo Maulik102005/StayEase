@@ -28,6 +28,11 @@ const listingSchema = new Schema({
       ref: "Review",
     },
   ],
+
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 //MW ro delete corresponding reviews to deleted object id
