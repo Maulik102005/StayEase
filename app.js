@@ -31,11 +31,13 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(dbUrl);
-
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/wanderLust');` if your database has auth enabled
+  try {
+    await mongoose.connect(dbUrl);
+    console.log("Connected to MongoDB");
+  } catch (e) {
+    console.error("MongoDB connection error:", e);
+  }
 }
-
 //ejs
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -98,6 +100,7 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
-app.listen(8080, () => {
-  console.log("server is running");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
