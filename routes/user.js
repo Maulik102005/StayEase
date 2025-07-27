@@ -44,9 +44,19 @@ router.post(
   async (req, res) => {
     req.flash("success", "Welcome to site. You are logged in");
 
-    if (res.locals.redirectUrl) res.redirect(res.locals.redirectUrl);
+    let redirectUrl = res.locals.redirectUrl || "/listings";
 
-    if (!res.locals.redirectUrl) res.redirect("/listings");
+    if (redirectUrl.includes("/reviews")) {
+      if (redirectUrl.startsWith("/listings/")) {
+        const segments = redirectUrl.split("/");
+
+        // segments[0] = "", segments[1] = "listings", segments[2] = ":id"
+        const listingId = segments[2];
+
+        if (listingId) return res.redirect(`/listings/${listingId}`);
+      }
+    }
+    res.redirect(redirectUrl);
   }
 );
 

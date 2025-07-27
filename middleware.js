@@ -1,7 +1,11 @@
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl; //TO redirect at earlier required page after logging in
-    req.flash("error", "You must be logged in to create a new listing");
+    if (req.originalUrl.includes("/reviews")) {
+      req.flash("error", "You cannot send a review unless you are logged in");
+    } else {
+      req.flash("error", "You must be logged in to create a new listing");
+    }
     return res.redirect("/login");
   }
   next();

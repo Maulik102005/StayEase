@@ -6,7 +6,7 @@
 
       <h3>Create a new listing</h3>
 
-      <form method="POST" action="/listings">
+      <form method="POST" action="/listings" enctype="multipart/form-data">
         <!-- Enter Title -->
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
@@ -30,15 +30,10 @@
           ></textarea>
         </div>
 
-        <!-- Enter Image -->
+        <!-- Upload Image -->
         <div class="mb-3">
-          <label for="image" class="form-label">Image Link</label>
-          <input
-            type="text"
-            name="listing[image]"
-            placeholder="Enter Image link/url"
-            class="form-control"
-          />
+          <label for="image" class="form-label">Upload Image</label>
+          <input type="file" name="listing[image]" class="form-control" />
         </div>
 
         <div class="row">
