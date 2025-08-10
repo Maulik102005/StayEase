@@ -3,7 +3,7 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/expressError.js");
 const Listing = require("../models/listing.js");
-const { isLoggedIn } = require("../middleware.js");
+const { isLoggedIn, isOwner } = require("../middleware.js");
 const listingController = require("../controllers/listing.js");
 const multer = require("multer");
 const { storage } = require("../cloudconfig.js");
@@ -25,11 +25,11 @@ router.get("/new", isLoggedIn, listingController.renderNewForm);
 router
   .route("/:id")
   .get(wrapAsync(listingController.ShowListing))
-  .put(isLoggedIn, listingController.renderEditForm)
-  .delete(isLoggedIn, listingController.destroyListing);
+  .put(isLoggedIn, isOwner, listingController.renderEditForm)
+  .delete(isLoggedIn, isOwner, listingController.destroyListing);
 
 //Edit Route
-router.get("/:id/edit", isLoggedIn, async (req, res) => {
+router.get("/:id/edit", isLoggedIn, isOwner, async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/edit.ejs", { listing });

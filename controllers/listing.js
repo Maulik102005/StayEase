@@ -13,7 +13,12 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.ShowListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id)
-    .populate("reviews")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+      }, //Nested populate so that author can be parsed
+    })
     .populate("owner");
   if (!listing) {
     req.flash("error", "Listing requested does not exist");
@@ -23,8 +28,17 @@ module.exports.ShowListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-  let url = req.file.path;
-  let filename = req.file.filename;
+  let url, filename;
+
+  if (req.file) {
+    // File uploaded via multer
+    url = req.file.path;
+    filename = req.file.filename;
+  } else if (req.body.listing.image) {
+    // Image link from form input
+    url = req.body.listing.image;
+    filename = ""; // no filename for URL
+  }
 
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
@@ -37,6 +51,7 @@ module.exports.createListing = async (req, res, next) => {
 
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
+
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
   res.redirect("/listings");
 };

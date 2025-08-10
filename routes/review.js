@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/expressError.js");
-const { isLoggedIn } = require("../middleware.js");
+const { isLoggedIn, isAuthor } = require("../middleware.js");
 const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
 
@@ -11,7 +11,7 @@ const Listing = require("../models/listing.js");
 router.post("/", isLoggedIn, async (req, res) => {
   let listing = await Listing.findById(req.params.id).populate("reviews");
   let newReview = new Review(req.body.review);
-
+  newReview.author = req.user._id;
   listing.reviews.push(newReview._id);
 
   await newReview.save();
@@ -24,6 +24,7 @@ router.post("/", isLoggedIn, async (req, res) => {
 router.delete(
   "/:reviewId",
   isLoggedIn,
+  isAuthor,
   wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
