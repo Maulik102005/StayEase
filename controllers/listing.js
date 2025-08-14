@@ -62,3 +62,31 @@ module.exports.destroyListing = async (req, res) => {
   req.flash("success", "Listing Deleted!");
   res.redirect("/listings");
 };
+
+module.exports.searchListings = async (req, res) => {
+  try {
+    const searchTerm = req.body.search ? req.body.search.trim() : "";
+
+    // If no search term, just redirect to all listings
+    if (!searchTerm) {
+      return res.redirect("/listings");
+    }
+
+    // Case-insensitive partial match search
+    const allListings = await Listing.find({
+      title: { $regex: searchTerm, $options: "i" },
+    });
+
+    // If no results, flash a message and show empty list
+    if (allListings.length === 0) {
+      req.flash("error", `No listings found for "${searchTerm}"`);
+      return res.redirect("/listings");
+    }
+
+    res.render("listings/index.ejs", { allListings });
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong while searching.");
+    res.redirect("/listings");
+  }
+};

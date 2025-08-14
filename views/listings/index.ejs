@@ -1,6 +1,6 @@
 <% layout("./layouts/boilerplate") -%> <%= success %>
 <body>
-  <style>
+  <!-- <style>
     #filters {
       display: flex;
       flex-wrap: wrap;
@@ -17,24 +17,8 @@
       opacity: 1;
       cursor: pointer;
     }
-  </style>
-  <div id="filters">
-    <!-- Trending -->
-    <div class="filter">
-      <div><i class="fa-solid fa-fire"></i></div>
-      <p>Trending</p>
-    </div>
-    <!-- Rooms -->
-    <div class="filter">
-      <div><i class="fa-solid fa-house"></i></div>
-      <p>Rooms</p>
-    </div>
-    <!-- Trending -->
-    <div class="filter">
-      <div><i class="fa-solid fa-fire"></i></div>
-      <p>Trending</p>
-    </div>
-  </div>
+  </style> -->
+
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for(let listing of allListings){ %>
     <a href="/listings/<%= listing._id%>" class="listing-link">
