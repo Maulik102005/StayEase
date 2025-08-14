@@ -33,11 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
-// Temporary root route
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
 // Main async function
 async function main() {
   try {
@@ -53,7 +48,7 @@ async function main() {
     });
 
     store.on("error", () => {
-      console.log("❌ Error in mongo session store");
+      console.log("Error in mongo session store");
     });
 
     const sessionOptions = {
